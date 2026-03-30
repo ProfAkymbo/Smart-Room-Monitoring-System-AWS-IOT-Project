@@ -1,0 +1,26 @@
+import { DynamoDBClient, PutItemCommand } from "@aws-sdk/client-dynamodb";
+
+const client = new DynamoDBClient({});
+
+export const handler = async (event) => {
+   console.log("Incoming:", event);
+
+   const roomId = event.room_id;
+   const occupancy = event.occupancy;
+   const motion = event.motion;
+   const timestamp = new Date().toISOString();
+
+   const params = {
+       TableName: "RoomStatus",
+       Item: {
+           room_id: { S: roomId },
+           occupancy: { BOOL: occupancy },
+           motion: { BOOL: motion },
+           updated_at: { S: timestamp }
+       }
+   };
+
+   await client.send(new PutItemCommand(params));
+
+   return { status: "ok" };
+};
