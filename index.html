@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <title>Room Monitor</title>
+</head>
+<body>
+
+<h2>Room Status Dashboard</h2>
+<div id="rooms"></div>
+
+<script>
+const API_URL = "YOUR_API_URL_HERE";
+
+async function loadData() {
+ const res = await fetch(API_URL);
+ const data = await res.json();
+
+ let html = "";
+
+ data.forEach(item => {
+   const room = item.room_id.S;
+   const occupied = item.occupancy.BOOL;
+
+   html += `
+     <div style="margin:10px;padding:10px;border:1px solid #ccc;">
+       Room ${room}:
+       <b style="color:${occupied ? 'red' : 'green'}">
+         ${occupied ? 'Occupied' : 'Vacant'}
+       </b>
+     </div>
+   `;
+ });
+
+ document.getElementById("rooms").innerHTML = html;
+}
+
+// refresh every 3 seconds
+setInterval(loadData, 3000);
+loadData();
+</script>
+
+</body>
+</html>
