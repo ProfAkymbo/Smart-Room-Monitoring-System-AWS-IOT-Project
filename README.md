@@ -1,6 +1,6 @@
 # Smart-Room-Monitoring-System-AWS-IOT-
 This project demonstrates a simple IoT-based room monitoring system for hospitality use cases.  It shows how room sensors send data to the cloud, where it is processed and displayed on a dashboard in near real-time.
-## Step 1 : Built-in MQTT Test Client (NO certificates needed)
+## Step 1 : Built-in MQTT Test Client
 This is what you’re using for your project to simulate the IOT device.
 It works because:
 You are already logged into AWS Console
