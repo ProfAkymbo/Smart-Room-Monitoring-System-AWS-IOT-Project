@@ -68,13 +68,13 @@ You’ll get a URL like:
 https://abc123.execute-api.region.amazonaws.com/rooms
 ### 7.4 Test your API
 Paste URL in browser
-You should see:
-[
- {
-   "room_id": { "S": "101" },
-   "occupancy": { "BOOL": true },
-   "motion": { "BOOL": true }
- }
+You should see:  
+[  
+ {  
+   "room_id": { "S": "101" },  
+   "occupancy": { "BOOL": true },  
+   "motion": { "BOOL": true }  
+ }  
 ]
 ## STEP 8 : Simple Dashboard
 Now let’s display it.
@@ -88,11 +88,13 @@ Use Live Server (VS Code)
 ## Conclusion
 you’ll see  
 ![Dashboard](dashboard1.JPG)  
+
 Room list  
 Status:  
 🔴 Occupied
 🟢 Vacant  
 Updates every 3 seconds  
+
 you can also send fresh data:  
 { "room_id": "101", "occupancy": true, "motion": true }  
 Dashboard turns RED  
