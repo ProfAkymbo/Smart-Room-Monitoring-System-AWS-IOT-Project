@@ -87,6 +87,7 @@ OR
 Use Live Server (VS Code)
 ## Conclusion
 you’ll see
+![Dashboard](./images/logo.png)
 Room list
 Status:
 🔴 Occupied
