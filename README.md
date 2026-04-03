@@ -86,18 +86,18 @@ Double-click the file
 OR
 Use Live Server (VS Code)
 ## Conclusion
-you’ll see
-![Dashboard](./images/logo.png)
-Room list
-Status:
+you’ll see  
+![Dashboard](dashboard1.JPG)  
+Room list  
+Status:  
 🔴 Occupied
-🟢 Vacant
-Updates every 3 seconds
-you can also send fresh data:
-{ "room_id": "101", "occupancy": true, "motion": true }
-Dashboard turns RED
+🟢 Vacant  
+Updates every 3 seconds  
+you can also send fresh data:  
+{ "room_id": "101", "occupancy": true, "motion": true }  
+Dashboard turns RED  
 
-Then send:
-{ "room_id": "101", "occupancy": false, "motion": false }
-Dashboard turns GREEN
+Then send:  
+{ "room_id": "101", "occupancy": false, "motion": false }  
+Dashboard turns GREEN  
 
