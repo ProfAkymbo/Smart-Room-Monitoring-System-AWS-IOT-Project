@@ -1,40 +1,167 @@
 <!DOCTYPE html>
 <html>
 <head>
- <title>Room Monitor</title>
+  <meta charset="UTF-8">
+  <title>Smart Room Dashboard</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7fb;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .filters button {
+      margin-right: 10px;
+      padding: 8px 14px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      background: #e0e0e0;
+    }
+
+    .filters button.active {
+      background: #007bff;
+      color: white;
+    }
+
+    .stats {
+      display: flex;
+      gap: 20px;
+      margin: 20px 0;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      flex: 1;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .rooms {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
+    }
+
+    .room-card {
+      background: white;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .status {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .occupied {
+      color: red;
+    }
+
+    .vacant {
+      color: green;
+    }
+  </style>
 </head>
+
 <body>
 
-<h2>Room Status Dashboard</h2>
-<div id="rooms"></div>
+<div class="header">
+  <h1>🏨 Room Dashboard</h1>
+
+  <div class="filters">
+    <button onclick="setFilter('all')" id="btn-all">All</button>
+    <button onclick="setFilter('occupied')" id="btn-occupied">Occupied</button>
+    <button onclick="setFilter('vacant')" id="btn-vacant">Vacant</button>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="card">
+    <h3>Total Rooms</h3>
+    <p id="total">0</p>
+  </div>
+  <div class="card">
+    <h3>Occupied</h3>
+    <p id="occupied">0</p>
+  </div>
+  <div class="card">
+    <h3>Vacant</h3>
+    <p id="vacant">0</p>
+  </div>
+</div>
+
+<div class="rooms" id="rooms"></div>
 
 <script>
-const API_URL = "YOUR_API_URL_HERE";
+const API_URL = "your_API_url_here";
 
-async function loadData() {
- const res = await fetch(API_URL);
- const data = await res.json();
+let currentFilter = "all";
+let allData = [];
 
- let html = "";
+function setFilter(filter) {
+  currentFilter = filter;
 
- data.forEach(item => {
-   const room = item.room_id.S;
-   const occupied = item.occupancy.BOOL;
+  document.querySelectorAll("button").forEach(btn => btn.classList.remove("active"));
+  document.getElementById("btn-" + filter).classList.add("active");
 
-   html += `
-     <div style="margin:10px;padding:10px;border:1px solid #ccc;">
-       Room ${room}:
-       <b style="color:${occupied ? 'red' : 'green'}">
-         ${occupied ? 'Occupied' : 'Vacant'}
-       </b>
-     </div>
-   `;
- });
-
- document.getElementById("rooms").innerHTML = html;
+  render();
 }
 
-// refresh every 3 seconds
+async function loadData() {
+  const res = await fetch(API_URL, { cache: "no-store" });
+  const data = await res.json();
+
+  allData = data;
+  render();
+}
+
+function render() {
+  let html = "";
+
+  let total = allData.length;
+  let occupiedCount = 0;
+  let vacantCount = 0;
+
+  allData.forEach(item => {
+    const room = item.room_id.S;
+    const occupied = item.occupancy.BOOL;
+
+    if (occupied) occupiedCount++;
+    else vacantCount++;
+
+    if (currentFilter === "occupied" && !occupied) return;
+    if (currentFilter === "vacant" && occupied) return;
+
+    html += `
+      <div class="room-card">
+        <h3>Room ${room}</h3>
+        <div class="status ${occupied ? 'occupied' : 'vacant'}">
+          ${occupied ? '● Occupied' : '● Vacant'}
+        </div>
+      </div>
+    `;
+  });
+
+  document.getElementById("rooms").innerHTML = html;
+  document.getElementById("total").innerText = total;
+  document.getElementById("occupied").innerText = occupiedCount;
+  document.getElementById("vacant").innerText = vacantCount;
+}
+
 setInterval(loadData, 3000);
 loadData();
 </script>
